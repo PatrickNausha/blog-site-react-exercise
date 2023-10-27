@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import "./App.css";
 
+const dateFormat = new Intl.DateTimeFormat("en-US");
+
 function App() {
   const { data: blogPosts, loadNextPage } = usePagedFetch({
     path: "/posts",
@@ -10,6 +12,7 @@ function App() {
   const posts = blogPosts ?? [];
   return (
     <div>
+      <h1>The Best Blog Site Ever</h1>
       {posts.map((post) => (
         <PostPreview key={post.id} post={post} />
       ))}
@@ -38,6 +41,7 @@ function usePagedFetch({ path, mapResponseToPage }) {
       const json = await fetchResult.json();
       setData((previous) => [...(previous ?? []), ...mapResponseToPage(json)]);
       nextPage.current++;
+      // TODO: Detect if has next
     } finally {
       currentRequest.current = null;
     }
@@ -49,7 +53,9 @@ function usePagedFetch({ path, mapResponseToPage }) {
 function PostPreview({ post }) {
   return (
     <div>
-      <h2>{post.title}</h2>
+      <h2>
+        {post.title} ({dateFormat.format(new Date(post.created_at))})
+      </h2>
       <h3>by {post.user.display_name}</h3>
     </div>
   );
