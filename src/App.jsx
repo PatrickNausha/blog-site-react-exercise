@@ -1,9 +1,18 @@
 import { useRef, useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { PostPreview } from "./PostPreview";
 import "./App.css";
 
-const dateFormat = new Intl.DateTimeFormat("en-US");
+export function Root() {
+  return (
+    <div>
+      <h1>The Best Blog Site Ever</h1>
+      <Outlet />
+    </div>
+  );
+}
 
-function App() {
+export function Index() {
   const { data: blogPosts, loadNextPage } = usePagedFetch({
     path: "/posts",
     mapResponseToPage: (response) => response.posts,
@@ -11,13 +20,12 @@ function App() {
   const infiniteScrollTriggerRef = useInfiniteScrollTrigger(loadNextPage);
   const posts = blogPosts ?? [];
   return (
-    <div>
-      <h1>The Best Blog Site Ever</h1>
+    <>
       {posts.map((post) => (
         <PostPreview key={post.id} post={post} />
       ))}
       <div ref={infiniteScrollTriggerRef}>Loading ...</div>
-    </div>
+    </>
   );
 }
 
@@ -50,17 +58,6 @@ function usePagedFetch({ path, mapResponseToPage }) {
   return { data, error, loadNextPage };
 }
 
-function PostPreview({ post }) {
-  return (
-    <div>
-      <h2>
-        {post.title} ({dateFormat.format(new Date(post.created_at))})
-      </h2>
-      <h3>by {post.user.display_name}</h3>
-    </div>
-  );
-}
-
 function useInfiniteScrollTrigger(loadNextPage) {
   const observerTargetRef = useRef(null);
 
@@ -88,5 +85,3 @@ function useInfiniteScrollTrigger(loadNextPage) {
 
   return observerTargetRef;
 }
-
-export default App;
