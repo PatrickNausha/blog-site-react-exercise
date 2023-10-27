@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const { data: blogPosts } = useFetchJson({ url: "/posts?page=1" });
+  if (blogPosts) {
+    const { meta, posts } = blogPosts;
+    return (
+      <>
+        {posts.map(({ title }) => (
+          <h1>{title}</h1>
+        ))}
+      </>
+    );
+  } else {
+    return <>Loading</>;
+  }
+}
+
+const baseUrl = "https://brivity-react-exercise.herokuapp.com";
+function useFetchJson({ url, method = "GET" }) {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const fetchResult = await fetch(baseUrl + url, { method });
+      const json = await fetchResult.json();
+      setData(json);
+    })();
+  }, [method, url]);
+
+  return { data, isLoading, error };
 }
 
 export default App;
