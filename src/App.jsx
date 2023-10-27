@@ -37,12 +37,12 @@ function usePagedFetch({ path, mapResponseToPage }) {
       const fetchResult = await currentRequest.current;
       const json = await fetchResult.json();
       setData((previous) => [...(previous ?? []), ...mapResponseToPage(json)]);
+      nextPage.current++;
     } finally {
       currentRequest.current = null;
     }
   };
 
-  console.log({ data });
   return { data, error, loadNextPage };
 }
 
