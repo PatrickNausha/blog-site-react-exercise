@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { Root, Index } from "./App";
 import { Post } from "./Post";
+import { SignIn } from "./SignIn";
+import { Register } from "./Register";
 import reportWebVitals from "./reportWebVitals";
 
 import {
@@ -17,6 +19,8 @@ const router = createBrowserRouter(
     <Route path="/" element={<Root />}>
       <Route index element={<Index />} />
       <Route path="posts/:postId" element={<Post />} />
+      <Route path="sign-in" element={<SignIn />} />
+      <Route path="register" element={<Register />} />
     </Route>
   )
 );
