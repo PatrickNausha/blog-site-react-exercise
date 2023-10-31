@@ -20,6 +20,7 @@ export function AuthenticationScope({ children }) {
     const json = await fetchResult.json();
     setCurrentUser(json);
   }
+
   async function register({ email, password, displayName }) {
     const fetchResult = await fetch(`${restApiBaseUrl}/users`, {
       method: "POST",
@@ -32,6 +33,9 @@ export function AuthenticationScope({ children }) {
         },
       }),
     });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
     const json = await fetchResult.json();
     setCurrentUser(json);
 
@@ -56,11 +60,12 @@ export function useAuthentication() {
     );
   }
 
-  const { authenticationToken, signIn, register } = context;
+  const { authenticationToken, signIn, register, currentUser } = context;
 
   return {
     authenticationToken,
     signIn,
     register,
+    currentUser,
   };
 }
