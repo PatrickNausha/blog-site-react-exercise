@@ -5,6 +5,7 @@ import { Root, Index } from "./App";
 import { Post } from "./Post";
 import { SignIn } from "./SignIn";
 import { Register } from "./Register";
+import { AuthenticationScope } from "./authentication";
 import reportWebVitals from "./reportWebVitals";
 
 import {
@@ -28,7 +29,9 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthenticationScope>
+      <RouterProvider router={router} />
+    </AuthenticationScope>
   </React.StrictMode>
 );
 
