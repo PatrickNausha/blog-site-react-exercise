@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { restApiBaseUrl, dateFormat } from "./config";
-import {
-  usePagedFetch as usePagedData,
-  useInfiniteScrollTrigger,
-} from "./infinite-scroll";
+import { usePagedData } from "./infinite-scroll";
 import { useAuthentication } from "./authentication";
 
 export function Post() {

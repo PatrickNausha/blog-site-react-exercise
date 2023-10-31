@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-export function usePagedFetch(getPage) {
+export function usePagedData(getPage) {
   const [initialGetPage] = useState(() => getPage); // Don't support changing getPage between renders.
   const [data, setData] = useState(null);
   const currentRequest = useRef(null);

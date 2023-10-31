@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { PostPreview } from "./PostPreview";
-import { usePagedFetch, useInfiniteScrollTrigger } from "./infinite-scroll";
+import { usePagedData, useInfiniteScrollTrigger } from "./infinite-scroll";
 import "./App.css";
 import { useAuthentication } from "./authentication";
 import { restApiBaseUrl } from "./config";
@@ -21,9 +21,7 @@ export function Root() {
 
 export function Index() {
   // TODO: Detect last page.
-  const { data: blogPosts, loadNextPage } = usePagedFetch(async function (
-    page
-  ) {
+  const { data: blogPosts, loadNextPage } = usePagedData(async function (page) {
     const fetchResult = await fetch(`${restApiBaseUrl}/posts?page=${page}`);
     const json = await fetchResult.json();
     const newPage = json.posts;
