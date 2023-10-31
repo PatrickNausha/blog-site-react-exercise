@@ -15,7 +15,23 @@ export function Register() {
   return (
     <div>
       <h2>Create an Account</h2>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          register({
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            displayName: displayNameRef.current.value,
+          })
+            .then(() => {
+              navigate("/");
+            })
+            .catch((e) => {
+              setError("An error occurred. Try Again.");
+              console.error(e);
+            });
+        }}
+      >
         <div>
           <label>
             Email
@@ -34,24 +50,7 @@ export function Register() {
             <input type="text" ref={displayNameRef} />
           </label>
         </div>
-        <button
-          onClick={() => {
-            register({
-              email: emailRef.current.value,
-              password: passwordRef.current.value,
-              displayName: displayNameRef.current.value,
-            })
-              .then(() => {
-                navigate("/");
-              })
-              .catch(() => {
-                // TODO: Assert 2xx
-                setError("An error occurred. Try Again.");
-              });
-          }}
-        >
-          Create
-        </button>
+        <button>Create</button>
         {error && <p>{error}</p>}
         <p>
           Already have an account? <Link to={"/sign-in"}>Sign in</Link>.
