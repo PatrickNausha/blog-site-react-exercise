@@ -24,6 +24,7 @@ export function usePagedFetch(getPage) {
       if (!newPage.length) {
         hasMore.current = false;
       }
+      currentRequest.current = null;
     })();
 
     return () => {
@@ -35,7 +36,9 @@ export function usePagedFetch(getPage) {
     data,
     error,
     loadNextPage: () => {
-      setCurrentPage((previous) => previous++);
+      if (!currentRequest.current) {
+        setCurrentPage((previous) => previous + 1);
+      }
     },
     hasMore: hasMore.current,
   };
