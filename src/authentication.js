@@ -17,6 +17,9 @@ export function AuthenticationScope({ children }) {
         },
       }),
     });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
     const json = await fetchResult.json();
     setCurrentUser(json);
   }

@@ -17,7 +17,7 @@ export function Register() {
       <h2>Create an Account</h2>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault(); // Prevent browser form submission
           register({
             email: emailRef.current.value,
             password: passwordRef.current.value,

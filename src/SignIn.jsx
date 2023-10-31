@@ -14,7 +14,22 @@ export function SignIn() {
   return (
     <div>
       <h2>Sign In</h2>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault(); // Prevent browser form submission
+          signIn({
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+          })
+            .then(() => {
+              navigate("/");
+            })
+            .catch(() => {
+              setError("An error occurred. Try Again.");
+              console.error(e);
+            });
+        }}
+      >
         <div>
           <label>
             Email
@@ -27,23 +42,7 @@ export function SignIn() {
             <input type="password" ref={passwordRef} />
           </label>
         </div>
-        <button
-          onClick={() => {
-            signIn({
-              email: emailRef.current.value,
-              password: passwordRef.current.value,
-            })
-              .then(() => {
-                navigate("/");
-              })
-              .catch(() => {
-                // TODO: Assert 2xx
-                setError("An error occurred. Try Again.");
-              });
-          }}
-        >
-          Sign in
-        </button>
+        <button>Sign in</button>
         {error && <p>{error}</p>}
         <p>
           Don't have an account? <Link to={"/register"}>Create one</Link>.
