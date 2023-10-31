@@ -22,6 +22,7 @@ export function AuthenticationScope({ children }) {
     }
     const json = await fetchResult.json();
     setCurrentUser(json);
+    setAuthenticationToken(fetchResult.headers.get("Authorization"));
   }
 
   async function register({ email, password, displayName }) {
@@ -41,8 +42,7 @@ export function AuthenticationScope({ children }) {
     }
     const json = await fetchResult.json();
     setCurrentUser(json);
-
-    // TODO: Set auth token
+    setAuthenticationToken(fetchResult.headers.get("Authorization"));
   }
 
   return (

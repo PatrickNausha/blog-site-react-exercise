@@ -1,36 +1,44 @@
 import { useState, useRef, useEffect } from "react";
-import { restApiBaseUrl } from "./config";
 
-export function usePagedFetch({ path, mapResponseToPage }) {
+export function usePagedFetch(getPage) {
+  const [initialGetPage] = useState(() => getPage); // Don't support changing getPage between renders.
   const [data, setData] = useState(null);
   const currentRequest = useRef(null);
-  const nextPage = useRef(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null); // TODO: handle errors
   const hasMore = useRef(true);
 
-  const loadNextPage = async () => {
-    if (currentRequest.current || !hasMore.current) {
+  useEffect(() => {
+    let isCancelled = false;
+    if (!hasMore.current) {
       return;
     }
 
-    try {
-      currentRequest.current = fetch(
-        `${restApiBaseUrl}${path}?page=${nextPage.current}`
-      );
-      const fetchResult = await currentRequest.current;
-      const json = await fetchResult.json();
-      const newPage = mapResponseToPage(json);
+    (async () => {
+      currentRequest.current = initialGetPage(currentPage);
+      const newPage = await currentRequest.current;
+      if (isCancelled) {
+        return;
+      }
       setData((previous) => [...(previous ?? []), ...newPage]);
-      nextPage.current++;
       if (!newPage.length) {
         hasMore.current = false;
       }
-    } finally {
-      currentRequest.current = null;
-    }
-  };
+    })();
 
-  return { data, error, loadNextPage, hasMore: hasMore.current };
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentPage, initialGetPage]);
+
+  return {
+    data,
+    error,
+    loadNextPage: () => {
+      setCurrentPage((previous) => previous++);
+    },
+    hasMore: hasMore.current,
+  };
 }
 
 export function useInfiniteScrollTrigger(loadNextPage) {

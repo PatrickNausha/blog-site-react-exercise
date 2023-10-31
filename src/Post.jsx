@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { restApiBaseUrl, dateFormat } from "./config";
-import { usePagedFetch, useInfiniteScrollTrigger } from "./infinite-scroll";
+import {
+  usePagedFetch as usePagedData,
+  useInfiniteScrollTrigger,
+} from "./infinite-scroll";
+import { useAuthentication } from "./authentication";
 
 export function Post() {
   const { postId } = useParams();
@@ -46,19 +50,71 @@ function Comments({ postId }) {
     data: postComments,
     loadNextPage,
     hasMore,
-  } = usePagedFetch({
-    path: `/posts/${postId}/comments`,
-    mapResponseToPage: (response) => response.comments,
+  } = usePagedData(async function (page) {
+    const fetchResult = await fetch(
+      `${restApiBaseUrl}/posts/${postId}/comments?page=${page}`
+    );
+    const json = await fetchResult.json();
+    const newPage = json.comments;
+    return newPage;
   });
-  const infiniteScrollTriggerRef = useInfiniteScrollTrigger(loadNextPage);
+  const { currentUser, authenticationToken } = useAuthentication();
+  const [myNewComments, setMyNewComments] = useState([]);
 
-  const comments = postComments ?? [];
+  async function addComment(commentText) {
+    const fetchResult = await fetch(`${restApiBaseUrl}/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authenticationToken,
+      },
+      body: JSON.stringify({
+        comment: {
+          post_id: postId,
+          content: commentText,
+        },
+      }),
+    });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
+
+    const json = fetchResult.json();
+    setMyNewComments((previous) => [...previous, json.comment]);
+  }
+
+  const comments = [...(postComments ?? []), ...myNewComments];
   return (
     <>
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
-      {hasMore && <div ref={infiniteScrollTriggerRef}>Loading ...</div>}
+      {hasMore && (
+        <button
+          onClick={() => {
+            // TODO: Prevent reloading new comments
+            loadNextPage();
+          }}
+        >
+          Show more comments
+        </button>
+      )}
+      {currentUser && <NewComment addComment={addComment} />}
     </>
+  );
+}
+
+function NewComment({ addComment }) {
+  const textAreaRef = useRef();
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault(); // Prevent browser form submission.
+        addComment(textAreaRef.current.value);
+      }}
+    >
+      <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
+      <button>Add comment</button>
+    </form>
   );
 }
