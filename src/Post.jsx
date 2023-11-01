@@ -32,8 +32,8 @@ export function Post() {
   );
 }
 
-function Comment({ comment, currentUser }) {
-  const isMyComment = comment.user.id === currentUser.id;
+function Comment({ comment, currentUser, deleteComment }) {
+  const isMyComment = comment.user.id === currentUser?.id;
   const [isEditing, setIsEditing] = useState(false);
   return (
     <div>
@@ -51,9 +51,15 @@ function Comment({ comment, currentUser }) {
       {
         isEditing && <button>Save</button> // TODO: wire up button
       }
-      {
-        isMyComment && <button>Delete</button> // TODO: wire up button
-      }
+      {isMyComment && (
+        <button
+          onClick={() => {
+            deleteComment(comment.id);
+          }}
+        >
+          Delete
+        </button>
+      )}
     </div>
   );
 }
@@ -98,7 +104,7 @@ function NewComment({ addComment }) {
 
 const maxCommentPages = 100; // Avoid hammering server too much
 function usePostComments(postId) {
-  const { currentUser, authenticationToken } = useAuthentication();
+  const { authenticationToken } = useAuthentication();
   const [comments, setComments] = useState([]);
 
   async function addComment(commentText) {
@@ -126,6 +132,7 @@ function usePostComments(postId) {
   async function deleteComment(commentId) {
     const fetchResult = await fetch(`${restApiBaseUrl}/comments/${commentId}`, {
       method: "DELETE",
+      headers: { Authorization: authenticationToken },
     });
     if (!fetchResult.ok) {
       throw new Error(`Unexpected status. ${fetchResult.status}`);
