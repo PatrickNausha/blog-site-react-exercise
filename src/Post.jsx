@@ -32,33 +32,48 @@ export function Post() {
   );
 }
 
-function Comment({ comment, currentUser, deleteComment }) {
+function Comment({ comment, currentUser, deleteComment, editComment }) {
   const isMyComment = comment.user.id === currentUser?.id;
   const [isEditing, setIsEditing] = useState(false);
+  const editorRef = useRef();
   return (
     <div>
       <h4>{comment.user.display_name}</h4>
-      {isEditing ? <textarea></textarea> : <p>{comment.content}</p>}
-      {isMyComment && (
-        <button
-          onClick={() => {
-            setIsEditing(true);
-          }}
-        >
-          Edit
-        </button>
-      )}
-      {
-        isEditing && <button>Save</button> // TODO: wire up button
-      }
-      {isMyComment && (
-        <button
-          onClick={() => {
-            deleteComment(comment.id);
-          }}
-        >
-          Delete
-        </button>
+      {isEditing ? (
+        <>
+          <textarea ref={editorRef} defaultValue={comment.content}></textarea>
+          <button
+            onClick={() => {
+              editComment(comment.id, editorRef.current.value).then(() => {
+                setIsEditing(false);
+              });
+            }}
+          >
+            Save
+          </button>
+        </>
+      ) : (
+        <>
+          <p>{comment.content}</p>
+          {isMyComment && (
+            <>
+              <button
+                onClick={() => {
+                  setIsEditing(true);
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  deleteComment(comment.id);
+                }}
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </>
       )}
     </div>
   );
@@ -156,11 +171,11 @@ function usePostComments(postId) {
       throw new Error(`Unexpected status. ${fetchResult.status}`);
     }
     const json = await fetchResult.json();
-    setComments((previous) => [
+    setComments((previous) =>
       previous.map((comment) =>
         comment.id === commendId ? json.comment : comment
-      ),
-    ]);
+      )
+    );
   }
 
   useEffect(() => {
