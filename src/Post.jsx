@@ -85,7 +85,9 @@ function NewComment({ addComment }) {
     <form
       onSubmit={(e) => {
         e.preventDefault(); // Prevent browser form submission.
-        addComment(textAreaRef.current.value);
+        addComment(textAreaRef.current.value).then(() => {
+          textAreaRef.current.value = "";
+        });
       }}
     >
       <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
@@ -175,9 +177,20 @@ function usePostComments(postId) {
 
         const newPage = json.comments;
         comments = [...comments, ...newPage];
-        // TODO: Sort by date
-        setComments(comments);
+
+        hasMore = newPage.length;
       }
+
+      comments.sort((a, b) => {
+        if (a.created_at < b.created_at) {
+          return 1;
+        } else if (a.created_at > b.created_at) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      setComments(comments);
     })();
 
     return () => {
