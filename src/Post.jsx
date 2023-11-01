@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { restApiBaseUrl, dateFormat } from "./config";
-import { usePagedData } from "./infinite-scroll";
 import { useAuthentication } from "./authentication";
 
 export function Post() {
@@ -33,30 +32,72 @@ export function Post() {
   );
 }
 
-function Comment({ comment }) {
+function Comment({ comment, currentUser }) {
+  const isMyComment = comment.user.id === currentUser.id;
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <div>
       <h4>{comment.user.display_name}</h4>
-      <p>{comment.content}</p>
+      {isEditing ? <textarea></textarea> : <p>{comment.content}</p>}
+      {isMyComment && (
+        <button
+          onClick={() => {
+            setIsEditing(true);
+          }}
+        >
+          Edit
+        </button>
+      )}
+      {
+        isEditing && <button>Save</button> // TODO: wire up button
+      }
+      {
+        isMyComment && <button>Delete</button> // TODO: wire up button
+      }
     </div>
   );
 }
 
 function Comments({ postId }) {
-  const {
-    data: postComments,
-    loadNextPage,
-    hasMore,
-  } = usePagedData(async function (page) {
-    const fetchResult = await fetch(
-      `${restApiBaseUrl}/posts/${postId}/comments?page=${page}`
-    );
-    const json = await fetchResult.json();
-    const newPage = json.comments;
-    return newPage;
-  });
   const { currentUser, authenticationToken } = useAuthentication();
-  const [myNewComments, setMyNewComments] = useState([]);
+  // TODO: Handle loading and trying to post case
+  const { comments, addComment, deleteComment, editComment } =
+    usePostComments(postId);
+  return (
+    <>
+      {currentUser && <NewComment addComment={addComment} />}
+      {comments.map((comment) => (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          editComment={editComment}
+          deleteComment={deleteComment}
+          currentUser={currentUser}
+        />
+      ))}
+    </>
+  );
+}
+
+function NewComment({ addComment }) {
+  const textAreaRef = useRef();
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault(); // Prevent browser form submission.
+        addComment(textAreaRef.current.value);
+      }}
+    >
+      <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
+      <button>Add comment</button>
+    </form>
+  );
+}
+
+const maxCommentPages = 100; // Avoid hammering server too much
+function usePostComments(postId) {
+  const { currentUser, authenticationToken } = useAuthentication();
+  const [comments, setComments] = useState([]);
 
   async function addComment(commentText) {
     const fetchResult = await fetch(`${restApiBaseUrl}/comments`, {
@@ -76,42 +117,73 @@ function Comments({ postId }) {
       throw new Error(`Unexpected status. ${fetchResult.status}`);
     }
 
-    const json = fetchResult.json();
-    setMyNewComments((previous) => [...previous, json.comment]);
+    const json = await fetchResult.json();
+    setComments((previous) => [json.comment, ...previous]);
   }
 
-  const comments = [...(postComments ?? []), ...myNewComments];
-  return (
-    <>
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
-      ))}
-      {hasMore && (
-        <button
-          onClick={() => {
-            // TODO: Prevent reloading new comments
-            loadNextPage();
-          }}
-        >
-          Show more comments
-        </button>
-      )}
-      {currentUser && <NewComment addComment={addComment} />}
-    </>
-  );
-}
+  async function deleteComment(commentId) {
+    const fetchResult = await fetch(`${restApiBaseUrl}/comments/${commentId}`, {
+      method: "DELETE",
+    });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
 
-function NewComment({ addComment }) {
-  const textAreaRef = useRef();
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault(); // Prevent browser form submission.
-        addComment(textAreaRef.current.value);
-      }}
-    >
-      <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
-      <button>Add comment</button>
-    </form>
-  );
+    setComments((previous) => previous.filter(({ id }) => id !== commentId));
+  }
+
+  async function editComment(commendId, commentText) {
+    const fetchResult = await fetch(`${restApiBaseUrl}/comments/${commendId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authenticationToken,
+      },
+      body: JSON.stringify({
+        comment: { content: commentText },
+      }),
+    });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
+    const json = await fetchResult.json();
+    setComments((previous) => [
+      previous.map((comment) =>
+        comment.id === commendId ? json.comment : comment
+      ),
+    ]);
+  }
+
+  useEffect(() => {
+    let isCancelled = false;
+    (async () => {
+      // For reduced scope, don't support paging. Load everything
+      let hasMore = true;
+      let comments = [];
+      for (let page = 1; hasMore && page <= maxCommentPages; page++) {
+        const fetchResult = await fetch(
+          `${restApiBaseUrl}/posts/${postId}/comments?page=${page}`
+        );
+        const json = await fetchResult.json();
+        if (isCancelled) {
+          return;
+        }
+
+        if (!fetchResult.ok) {
+          throw new Error(`Unexpected status. ${fetchResult.status}`);
+        }
+
+        const newPage = json.comments;
+        comments = [...comments, ...newPage];
+        // TODO: Sort by date
+        setComments(comments);
+      }
+    })();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [postId]);
+
+  return { comments, addComment, deleteComment, editComment };
 }
