@@ -1,25 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import { Root, Index } from "./App";
-import { Post } from "./Post";
-import { SignIn } from "./SignIn";
-import { Register } from "./Register";
-import { AuthenticationScope } from "./authentication";
-import reportWebVitals from "./reportWebVitals";
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
   Route,
 } from "react-router-dom";
+import "./index.css";
+import { Root } from "./Root";
+import { Homepage } from "./Homepage";
+import { Post } from "./Post";
+import { SignIn } from "./SignIn";
+import { Register } from "./Register";
+import { CreatePost } from "./CreatePost";
+import { AuthenticationScope } from "./authentication";
+import reportWebVitals from "./reportWebVitals";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route index element={<Index />} />
+      <Route index element={<Homepage />} />
       <Route path="posts/:postId" element={<Post />} />
+      <Route path="posts/create" element={<CreatePost />} />
       <Route path="sign-in" element={<SignIn />} />
       <Route path="register" element={<Register />} />
     </Route>

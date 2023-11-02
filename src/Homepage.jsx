@@ -1,25 +1,13 @@
-import { Outlet } from "react-router-dom";
 import { PostPreview } from "./PostPreview";
 import { usePagedData, useInfiniteScrollTrigger } from "./infinite-scroll";
-import "./App.css";
 import { useAuthentication } from "./authentication";
+import "./App.css";
 import { restApiBaseUrl } from "./config";
+import { Link } from "react-router-dom";
 
-export function Root() {
+export function Homepage() {
   const { currentUser } = useAuthentication();
-  return (
-    <div>
-      <h1>The Best Blog Site Ever</h1>
-      {
-        // TODO: hide on sign-in page
-        !currentUser && <a href="/sign-in">Sign in</a>
-      }
-      <Outlet />
-    </div>
-  );
-}
 
-export function Index() {
   // TODO: Detect last page.
   const { data: blogPosts, loadNextPage } = usePagedData(async function (page) {
     const fetchResult = await fetch(`${restApiBaseUrl}/posts?page=${page}`);
@@ -29,8 +17,10 @@ export function Index() {
   });
   const infiniteScrollTriggerRef = useInfiniteScrollTrigger(loadNextPage);
   const posts = blogPosts ?? [];
+
   return (
     <>
+      {currentUser && <Link to="/posts/create">Create post</Link>}
       {posts.map((post) => (
         <PostPreview key={post.id} post={post} />
       ))}

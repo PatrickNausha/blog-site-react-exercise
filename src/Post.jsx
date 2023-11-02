@@ -80,7 +80,7 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
 }
 
 function Comments({ postId }) {
-  const { currentUser, authenticationToken } = useAuthentication();
+  const { currentUser } = useAuthentication();
   // TODO: Handle loading and trying to post case
   const { comments, addComment, deleteComment, editComment } =
     usePostComments(postId);
