@@ -14,7 +14,6 @@ import { SignIn } from "./SignIn";
 import { Register } from "./Register";
 import { CreatePost } from "./CreatePost";
 import { AuthenticationScope } from "./authentication";
-import reportWebVitals from "./reportWebVitals";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,8 +36,3 @@ root.render(
     </AuthenticationScope>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
