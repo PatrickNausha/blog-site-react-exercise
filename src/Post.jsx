@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { restApiBaseUrl, dateFormat } from "./config";
 import { useAuthentication } from "./authentication";
 
 export function Post() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const { currentUser, authenticationToken } = useAuthentication();
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       const fetchResult = await fetch(`${restApiBaseUrl}/posts/${postId}`);
@@ -18,6 +20,17 @@ export function Post() {
     return <div>Loading ...</div>;
   }
 
+  async function deletePost() {
+    const fetchResult = await fetch(`${restApiBaseUrl}/posts/${postId}`, {
+      method: "DELETE",
+      headers: { Authorization: authenticationToken },
+    });
+    if (!fetchResult.ok) {
+      throw new Error(`Unexpected status. ${fetchResult.status}`);
+    }
+  }
+
+  const isMyPost = post.user.id === currentUser?.id;
   return (
     <div>
       <h2>{post.title}</h2>
@@ -25,9 +38,20 @@ export function Post() {
         by {post.user.display_name} on{" "}
         {dateFormat.format(new Date(post.created_at))}
       </h3>
+      {isMyPost && (
+        <button
+          onClick={() => {
+            deletePost().then(() => {
+              navigate("/");
+            });
+          }}
+        >
+          Delete Post
+        </button>
+      )}
       {post.body}
       <h4>Comments</h4>
-      <Comments postId={post.id} />
+      <Comments currentUser={currentUser} postId={post.id} />
     </div>
   );
 }
@@ -79,8 +103,7 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
   );
 }
 
-function Comments({ postId }) {
-  const { currentUser } = useAuthentication();
+function Comments({ postId, currentUser }) {
   // TODO: Handle loading and trying to post case
   const { comments, addComment, deleteComment, editComment } =
     usePostComments(postId);
