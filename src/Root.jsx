@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { useAuthentication } from "./authentication";
 
 export function Root() {
@@ -13,6 +13,19 @@ export function Root() {
         </p>
         <div className="d-flex">
           <span className="mx-auto">
+            {
+              // TODO: hide on sign-in page
+              !currentUser && (
+                <>
+                  <Link to="/sign-in">Sign in</Link>&bull;
+                </>
+              )
+            }
+            {currentUser && (
+              <>
+                <Link to="/posts/create">Create post</Link>&bull;
+              </>
+            )}
             <a
               href="https://github.com/PatrickNausha/blog-site-react-exercise"
               target="_blank"
@@ -23,10 +36,6 @@ export function Root() {
           </span>
         </div>
       </div>
-      {
-        // TODO: hide on sign-in page
-        !currentUser && <a href="/sign-in">Sign in</a>
-      }
       <Outlet />
     </div>
   );
