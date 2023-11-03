@@ -5,16 +5,16 @@ export function Root() {
   const { currentUser } = useAuthentication();
   return (
     <div>
-      <div class="container py-5 my-4">
-        <h1 class="text-center mb-4">Ultimate Blog Site</h1>
-        <p class="text-center mb-4">
+      <div className="container py-5 my-4">
+        <h1 className="text-center mb-4">Ultimate Blog Site</h1>
+        <p className="text-center mb-4">
           This is a coding exercise blog site. Do not take the content
           seriously.
         </p>
-        <div class="d-flex">
-          <span class="mx-auto">
+        <div className="d-flex">
+          <span className="mx-auto">
             <a
-              href="https://github.com/patricknausha/threejs-demos"
+              href="https://github.com/PatrickNausha/blog-site-react-exercise"
               target="_blank"
               rel="noreferrer"
             >
