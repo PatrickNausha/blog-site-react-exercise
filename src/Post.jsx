@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { restApiBaseUrl, dateFormat } from "./config";
 import { useAuthentication } from "./authentication";
 
@@ -39,15 +39,18 @@ export function Post() {
         {dateFormat.format(new Date(post.created_at))}
       </h3>
       {isMyPost && (
-        <button
-          onClick={() => {
-            deletePost().then(() => {
-              navigate("/");
-            });
-          }}
-        >
-          Delete Post
-        </button>
+        <>
+          <Link to={`/posts/${postId}/edit`}>Edit</Link>
+          <button
+            onClick={() => {
+              deletePost().then(() => {
+                navigate("/");
+              });
+            }}
+          >
+            Delete Post
+          </button>
+        </>
       )}
       {post.body}
       <h4>Comments</h4>
