@@ -18,7 +18,7 @@ export function Post() {
   }, [postId]);
 
   if (!post) {
-    return <div>Loading ...</div>;
+    return <div className="container">Loading ...</div>;
   }
 
   async function deletePost() {
@@ -33,7 +33,7 @@ export function Post() {
 
   const isMyPost = post.user.id === currentUser?.id;
   return (
-    <div>
+    <div className="container">
       <h2>{post.title}</h2>
       <h3>
         by {post.user.display_name} on{" "}
@@ -53,8 +53,8 @@ export function Post() {
           </button>
         </>
       )}
-      {post.body}
-      <h4>Comments</h4>
+      <div class="border-bottom pb-4">{post.body}</div>
+      <h3 class="my-4">Comments</h3>
       <Comments currentUser={currentUser} postId={post.id} />
     </div>
   );

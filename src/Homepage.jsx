@@ -16,10 +16,10 @@ export function Homepage() {
 
   return (
     <>
-      <div className="homepage-posts">
+      <div>
         {posts.map((post) => (
           <div>
-            <div className="container">
+            <div className="container border-bottom">
               <PostPreview key={post.id} post={post} />
             </div>
           </div>
