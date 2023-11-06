@@ -31,8 +31,11 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
       <h4>{comment.user.display_name}</h4>
       {isEditing ? (
         <>
-          <textarea ref={editorRef} defaultValue={comment.content}></textarea>
+          <div>
+            <textarea ref={editorRef} defaultValue={comment.content}></textarea>
+          </div>
           <button
+            className="btn btn-primary"
             onClick={() => {
               editComment(comment.id, editorRef.current.value).then(() => {
                 setIsEditing(false);
@@ -48,13 +51,16 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
           {isMyComment && (
             <>
               <button
+                className="btn btn-link p-0"
                 onClick={() => {
                   setIsEditing(true);
                 }}
               >
                 Edit
               </button>
+              &nbsp;&bull;&nbsp;
               <button
+                className="btn btn-link p-0"
                 onClick={() => {
                   deleteComment(comment.id);
                 }}
@@ -80,8 +86,10 @@ function NewComment({ addComment }) {
         });
       }}
     >
-      <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
-      <button>Add comment</button>
+      <div>
+        <textarea ref={textAreaRef} placeholder="Add comment ..."></textarea>
+      </div>
+      <button className="btn btn-primary">Add comment</button>
     </form>
   );
 }

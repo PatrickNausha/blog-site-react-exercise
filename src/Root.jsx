@@ -17,13 +17,13 @@ export function Root() {
               // TODO: hide on sign-in page
               !currentUser && (
                 <>
-                  <Link to="/sign-in">Sign in</Link>&bull;
+                  <Link to="/sign-in">Sign in</Link>&nbsp;&bull;&nbsp;
                 </>
               )
             }
             {currentUser && (
               <>
-                <Link to="/posts/create">Create post</Link>&bull;
+                <Link to="/posts/create">Create post</Link>&nbsp;&bull;&nbsp;
               </>
             )}
             <a
