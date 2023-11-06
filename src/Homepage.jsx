@@ -1,6 +1,5 @@
 import { PostPreview } from "./PostPreview";
 import { usePagedData, useInfiniteScrollTrigger } from "./infinite-scroll";
-import "./App.css";
 import { restApiBaseUrl } from "./config";
 
 export function Homepage() {
