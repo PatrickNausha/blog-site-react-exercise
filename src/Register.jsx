@@ -13,7 +13,7 @@ export function Register() {
   const [error, setError] = useState(null);
 
   return (
-    <div>
+    <div className="container">
       <h2>Create an Account</h2>
       <form
         onSubmit={(e) => {
@@ -32,25 +32,25 @@ export function Register() {
             });
         }}
       >
-        <div>
+        <div className="pb-3">
           <label>
-            Email
+            <div>Email</div>
             <input type="email" ref={emailRef} />
           </label>
         </div>
-        <div>
+        <div className="pb-3">
           <label>
-            Password
+            <div>Password</div>
             <input type="password" ref={passwordRef} />
           </label>
         </div>
-        <div>
+        <div className="pb-3">
           <label>
-            Display Name
+            <div>Display Name</div>
             <input type="text" ref={displayNameRef} />
           </label>
         </div>
-        <button>Create</button>
+        <button className="btn btn-primary mb-3">Create</button>
         {error && <p>{error}</p>}
         <p>
           Already have an account? <Link to={"/sign-in"}>Sign in</Link>.

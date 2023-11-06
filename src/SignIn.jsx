@@ -12,7 +12,7 @@ export function SignIn() {
   const [error, setError] = useState(null);
 
   return (
-    <div class="container">
+    <div className="container">
       <h2>Sign In</h2>
       <form
         onSubmit={(e) => {
@@ -30,13 +30,13 @@ export function SignIn() {
             });
         }}
       >
-        <div class="pb-3">
+        <div className="pb-3">
           <label>
             <div>Email</div>
             <input type="email" ref={emailRef} />
           </label>
         </div>
-        <div class="pb-3">
+        <div className="pb-3">
           <label>
             <div>Password</div>
             <input type="password" ref={passwordRef} />
