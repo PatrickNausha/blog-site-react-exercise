@@ -12,7 +12,7 @@ export function SignIn() {
   const [error, setError] = useState(null);
 
   return (
-    <div>
+    <div class="container">
       <h2>Sign In</h2>
       <form
         onSubmit={(e) => {
@@ -30,19 +30,19 @@ export function SignIn() {
             });
         }}
       >
-        <div>
+        <div class="pb-3">
           <label>
-            Email
+            <div>Email</div>
             <input type="email" ref={emailRef} />
           </label>
         </div>
-        <div>
+        <div class="pb-3">
           <label>
-            Password
+            <div>Password</div>
             <input type="password" ref={passwordRef} />
           </label>
         </div>
-        <button>Sign in</button>
+        <button className="btn btn-primary mb-3">Sign in</button>
         {error && <p>{error}</p>}
         <p>
           Don't have an account? <Link to={"/register"}>Create one</Link>.
