@@ -2,24 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import { restApiBaseUrl } from "./config";
 import { useAuthentication } from "./authentication";
 
-// TODO: Handle empty comments
-
 export function Comments({ postId, currentUser }) {
   // TODO: Handle loading and trying to post case
-  const { comments, addComment, deleteComment, editComment } =
+  const { comments, isLoading, addComment, deleteComment, editComment } =
     usePostComments(postId);
   return (
     <>
       {currentUser && <NewComment addComment={addComment} />}
-      {comments.map((comment) => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          editComment={editComment}
-          deleteComment={deleteComment}
-          currentUser={currentUser}
-        />
-      ))}
+      {!isLoading && comments.length === 0 ? (
+        <span className="text-muted fst-italic mb-2">No comments yet.</span>
+      ) : (
+        comments.map((comment) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            editComment={editComment}
+            deleteComment={deleteComment}
+            currentUser={currentUser}
+          />
+        ))
+      )}
     </>
   );
 }
@@ -100,6 +102,7 @@ const maxCommentPages = 100; // Avoid hammering server too much
 function usePostComments(postId) {
   const { authenticationToken } = useAuthentication();
   const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function addComment(commentText) {
     const fetchResult = await fetch(`${restApiBaseUrl}/comments`, {
@@ -160,9 +163,11 @@ function usePostComments(postId) {
   useEffect(() => {
     let isCancelled = false;
     (async () => {
-      // For reduced scope, don't support paging. Load everything
       let hasMore = true;
       let comments = [];
+      setIsLoading(true);
+
+      // For reduced scope, don't support paging. Load everything
       for (let page = 1; hasMore && page <= maxCommentPages; page++) {
         const fetchResult = await fetch(
           `${restApiBaseUrl}/posts/${postId}/comments?page=${page}`
@@ -192,6 +197,7 @@ function usePostComments(postId) {
         }
       });
       setComments(comments);
+      setIsLoading(false);
     })();
 
     return () => {
@@ -199,5 +205,5 @@ function usePostComments(postId) {
     };
   }, [postId]);
 
-  return { comments, addComment, deleteComment, editComment };
+  return { comments, isLoading, addComment, deleteComment, editComment };
 }
