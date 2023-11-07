@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useAuthentication } from "./authentication";
 import { restApiBaseUrl } from "./config";
 
-export function CreatePost() {
+export function PostEditor() {
   const { postId } = useParams();
   const textEditorRef = useRef();
   const titleInputRef = useRef();
