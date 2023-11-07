@@ -17,17 +17,9 @@ export function Root() {
         </p>
         <div className="d-flex">
           <span className="mx-auto">
-            {
-              // TODO: hide on sign-in page
-              !currentUser && (
-                <>
-                  <Link to="/sign-in">Sign in</Link>&nbsp;&bull;&nbsp;
-                </>
-              )
-            }
-            {currentUser && (
+            {!currentUser && (
               <>
-                <Link to="/posts/create">Create post</Link>&nbsp;&bull;&nbsp;
+                <Link to="/sign-in">Sign in</Link>&nbsp;&bull;&nbsp;
               </>
             )}
             <a
