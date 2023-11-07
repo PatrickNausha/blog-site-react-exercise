@@ -36,10 +36,10 @@ export function Post() {
     <>
       <article className="container">
         <h2>{post.title}</h2>
-        <h3>
+        <span className="fw-bold">
           by {post.user.display_name} on{" "}
           {dateFormat.format(new Date(post.created_at))}
-        </h3>
+        </span>
         {isMyPost && (
           <>
             <Link to={`/posts/${postId}/edit`}>Edit</Link>
@@ -54,7 +54,7 @@ export function Post() {
             </button>
           </>
         )}
-        <div class="border-bottom pb-4">{post.body}</div>
+        <div class="border-bottom py-4">{post.body}</div>
       </article>
       <div className="container">
         <h3 class="my-4">Comments</h3>

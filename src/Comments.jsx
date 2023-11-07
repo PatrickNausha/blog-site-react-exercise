@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { restApiBaseUrl } from "./config";
 import { useAuthentication } from "./authentication";
 
+// TODO: Handle empty comments
+
 export function Comments({ postId, currentUser }) {
   // TODO: Handle loading and trying to post case
   const { comments, addComment, deleteComment, editComment } =
@@ -27,8 +29,8 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
   const [isEditing, setIsEditing] = useState(false);
   const editorRef = useRef();
   return (
-    <article>
-      <h4>{comment.user.display_name}</h4>
+    <article className="my-4">
+      <span className="fw-bold">{comment.user.display_name}</span>
       {isEditing ? (
         <>
           <div>
@@ -47,7 +49,7 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
         </>
       ) : (
         <>
-          <p>{comment.content}</p>
+          <p className="my-0">{comment.content}</p>
           {isMyComment && (
             <>
               <button
