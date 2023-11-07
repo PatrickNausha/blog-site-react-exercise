@@ -33,29 +33,33 @@ export function Post() {
 
   const isMyPost = post.user.id === currentUser?.id;
   return (
-    <div className="container">
-      <h2>{post.title}</h2>
-      <h3>
-        by {post.user.display_name} on{" "}
-        {dateFormat.format(new Date(post.created_at))}
-      </h3>
-      {isMyPost && (
-        <>
-          <Link to={`/posts/${postId}/edit`}>Edit</Link>
-          <button
-            onClick={() => {
-              deletePost().then(() => {
-                navigate("/");
-              });
-            }}
-          >
-            Delete Post
-          </button>
-        </>
-      )}
-      <div class="border-bottom pb-4">{post.body}</div>
-      <h3 class="my-4">Comments</h3>
-      <Comments currentUser={currentUser} postId={post.id} />
-    </div>
+    <>
+      <article className="container">
+        <h2>{post.title}</h2>
+        <h3>
+          by {post.user.display_name} on{" "}
+          {dateFormat.format(new Date(post.created_at))}
+        </h3>
+        {isMyPost && (
+          <>
+            <Link to={`/posts/${postId}/edit`}>Edit</Link>
+            <button
+              onClick={() => {
+                deletePost().then(() => {
+                  navigate("/");
+                });
+              }}
+            >
+              Delete Post
+            </button>
+          </>
+        )}
+        <div class="border-bottom pb-4">{post.body}</div>
+      </article>
+      <div className="container">
+        <h3 class="my-4">Comments</h3>
+        <Comments currentUser={currentUser} postId={post.id} />
+      </div>
+    </>
   );
 }

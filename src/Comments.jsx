@@ -27,7 +27,7 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
   const [isEditing, setIsEditing] = useState(false);
   const editorRef = useRef();
   return (
-    <div>
+    <article>
       <h4>{comment.user.display_name}</h4>
       {isEditing ? (
         <>
@@ -71,7 +71,7 @@ function Comment({ comment, currentUser, deleteComment, editComment }) {
           )}
         </>
       )}
-    </div>
+    </article>
   );
 }
 
