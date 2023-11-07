@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
-  createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
   Route,
+  createHashRouter,
 } from "react-router-dom";
 import "./index.css";
 import { Root } from "./Root";
@@ -15,7 +15,7 @@ import { Register } from "./Register";
 import { CreatePost } from "./CreatePost";
 import { AuthenticationScope } from "./authentication";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route index element={<Homepage />} />
