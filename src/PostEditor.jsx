@@ -69,7 +69,7 @@ export function PostEditor() {
 
   if (!currentUser) {
     return (
-      <div>
+      <div className="container">
         <Link to="/sign-in">Sign in</Link> to create a post.
       </div>
     );
@@ -78,11 +78,12 @@ export function PostEditor() {
   const isEditing = postId != null;
   const save = isEditing ? updatePost : createPost;
   if (isEditing && !post) {
-    return <div>Loading ...</div>;
+    return <div className="container">Loading ...</div>;
   }
 
   return (
     <form
+      className="container"
       onSubmit={(e) => {
         e.preventDefault(); // Prevent browser form submission
         save(textEditorRef.current.value).then(({ id }) => {
@@ -90,17 +91,26 @@ export function PostEditor() {
         });
       }}
     >
-      <h2>Create Post</h2>
+      <h2>{isEditing ? "Edit Post" : "Create Post"}</h2>
       <label>
-        Title:{" "}
-        <input defaultValue={post?.title} type="text" ref={titleInputRef} />
+        Title{" "}
+        <input
+          placeholder="Post title"
+          defaultValue={post?.title}
+          type="text"
+          ref={titleInputRef}
+        />
       </label>
-      <textarea
-        defaultValue={post?.body}
-        ref={textEditorRef}
-        placeholder="Create post"
-      ></textarea>
-      <button>{isEditing ? "Save" : "Create"}</button>
+      <div className="my-2">
+        <textarea
+          defaultValue={post?.body}
+          ref={textEditorRef}
+          placeholder="Post content"
+        ></textarea>
+      </div>
+      <button className="btn btn-primary">
+        {isEditing ? "Save" : "Create"}
+      </button>
     </form>
   );
 }
