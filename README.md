@@ -33,6 +33,8 @@ In order to reduce project scope and support deployment to GitHub pages, the fol
 - Request cancellation and deduplication.
   - It is possible that inflight `fetch` requests may trigger state mutations after a component is unmounted. This may result in error logs.
   - Future features could mutate state in ways that trigger duplicate `fetch` requests for the same data.
+- Proper 404 pages
+  - If a post is missing or a URL is otherwise invalid, you may see an eternal loading indicator.
 
 ## Developing
 
