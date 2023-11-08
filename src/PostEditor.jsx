@@ -86,7 +86,7 @@ export function PostEditor() {
       className="container"
       onSubmit={(e) => {
         e.preventDefault(); // Prevent browser form submission
-        save(textEditorRef.current.value).then(({ id }) => {
+        save().then(({ id }) => {
           navigate(`/posts/${id}`);
         });
       }}
