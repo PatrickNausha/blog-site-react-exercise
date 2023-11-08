@@ -5,10 +5,10 @@ export function usePagedData(getPage) {
   const [data, setData] = useState(null);
   const currentRequest = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const hasMore = useRef(true);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    if (!hasMore.current) {
+    if (!hasMore) {
       return;
     }
 
@@ -17,11 +17,11 @@ export function usePagedData(getPage) {
       const newPage = await currentRequest.current;
       setData((previous) => [...(previous ?? []), ...newPage]);
       if (!newPage.length) {
-        hasMore.current = false;
+        setHasMore(false);
       }
       currentRequest.current = null;
     })();
-  }, [currentPage, initialGetPage]);
+  }, [currentPage, hasMore, initialGetPage]);
 
   return {
     data,
@@ -30,7 +30,7 @@ export function usePagedData(getPage) {
         setCurrentPage((previous) => previous + 1);
       }
     },
-    hasMore: hasMore.current,
+    hasMore,
   };
 }
 
