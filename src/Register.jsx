@@ -9,7 +9,6 @@ export function Register() {
   const { register } = useAuthentication();
   const navigate = useNavigate();
 
-  // TODO: Make error messages more helpful and prettier.
   const [error, setError] = useState(null);
 
   return (
