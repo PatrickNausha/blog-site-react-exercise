@@ -3,12 +3,11 @@ import { restApiBaseUrl } from "./config";
 import { useAuthentication } from "./authentication";
 
 export function Comments({ postId, currentUser }) {
-  // TODO: Handle loading and trying to post case
   const { comments, isLoading, addComment, deleteComment, editComment } =
     usePostComments(postId);
   return (
     <>
-      {currentUser && <NewComment addComment={addComment} />}
+      {!isLoading && currentUser && <NewComment addComment={addComment} />}
       {!isLoading && comments.length === 0 ? (
         <span className="text-muted fst-italic mb-2">No comments yet.</span>
       ) : (
