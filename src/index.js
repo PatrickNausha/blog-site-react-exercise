@@ -12,16 +12,16 @@ import { Homepage } from "./Homepage";
 import { Post } from "./Post";
 import { SignIn } from "./SignIn";
 import { Register } from "./Register";
-import { CreatePost } from "./CreatePost";
 import { AuthenticationScope } from "./authentication";
+import { PostEditor } from "./PostEditor";
 
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route index element={<Homepage />} />
       <Route path="posts/:postId" element={<Post />} />
-      <Route path="posts/:postId/edit" element={<CreatePost />} />
-      <Route path="posts/create" element={<CreatePost />} />
+      <Route path="posts/:postId/edit" element={<PostEditor />} />
+      <Route path="posts/create" element={<PostEditor />} />
       <Route path="sign-in" element={<SignIn />} />
       <Route path="register" element={<Register />} />
     </Route>
