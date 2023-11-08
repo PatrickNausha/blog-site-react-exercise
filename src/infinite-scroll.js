@@ -5,11 +5,9 @@ export function usePagedData(getPage) {
   const [data, setData] = useState(null);
   const currentRequest = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [error, setError] = useState(null); // TODO: handle errors
   const hasMore = useRef(true);
 
   useEffect(() => {
-    let isCancelled = false;
     if (!hasMore.current) {
       return;
     }
@@ -17,24 +15,16 @@ export function usePagedData(getPage) {
     (async () => {
       currentRequest.current = initialGetPage(currentPage);
       const newPage = await currentRequest.current;
-      if (isCancelled) {
-        return;
-      }
       setData((previous) => [...(previous ?? []), ...newPage]);
       if (!newPage.length) {
         hasMore.current = false;
       }
       currentRequest.current = null;
     })();
-
-    return () => {
-      isCancelled = true;
-    };
   }, [currentPage, initialGetPage]);
 
   return {
     data,
-    error,
     loadNextPage: () => {
       if (!currentRequest.current) {
         setCurrentPage((previous) => previous + 1);
