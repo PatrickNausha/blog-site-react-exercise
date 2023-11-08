@@ -20,18 +20,15 @@ In order to reduce project scope and support deployment to GitHub pages, the fol
 - Full URL-based routing.
   - This project uses a hash-based routing system. This antiquated single-page application routing approach uses the URL fragment (e.g. `/blog-site-react-exercise/#/posts/create` instead of just `/blog-site-react-exercise/posts/create`)
 - Persistent authentication
-  - This application does not use cookie authentication.
-  - In a commercial context, this application would likely use a reverse proxy that transforms the JWT Authorization header into a cookie.
-  - An HTTP-only cookie instead of a JWT Authorization header would also reduce the risk that the JWT was stolen by a bad actor.
+  - Since I wanted to deploy this app easily to GitHub pages, there's no server code. In a commercial context, this application would likely use a reverse proxy in front of its APIs to transform the JWT Authorization header to and from an `HttpOnly` cookie.
+  - I could use [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) or a non-`HttpOnly` cookie to persist the authentication JWT, but neither of these practices are very secure—an authentication JWT in `localStorage` or a JS-accessible cookie can be stolen in the presence of an XSS attack, compromised browser plugin, etc.
 - Sever Side Rendering
-  - This is a client side rendered, single-page application.
-  - Rationale: Using only static files and no server code allows the site to be deployed to GitHub pages.
 - Error feedback
   - Error feedback is extremely limited.
   - If the user provides bad input, e.g. invalid password, either a generic error message or no error message will be shown.
   - Operations that fail due to server errors may silently fail or crash the page.
 - Request cancellation and deduplication.
-  - It is possible that inflight `fetch` requests may trigger state mutations after a component is unmounted. This may result in error logs.
+  - It is possible that inflight `fetch` requests may trigger state mutations after a component is unmounted. This may result in error messages.
   - Future features could mutate state in ways that trigger duplicate `fetch` requests for the same data.
 - Proper 404 pages
   - If a post is missing or a URL is otherwise invalid, you may see an eternal loading indicator.
