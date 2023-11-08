@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-const dateFormat = new Intl.DateTimeFormat("en-US");
+import { dateFormat } from "./config";
 
 export function PostPreview({ post }) {
   return (
