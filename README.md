@@ -30,6 +30,9 @@ In order to reduce project scope and support deployment to GitHub pages, the fol
   - Error feedback is extremely limited.
   - If the user provides bad input, e.g. invalid password, either a generic error message or no error message will be shown.
   - Operations that fail due to server errors may silently fail or crash the page.
+- Request cancellation and deduplication.
+  - It is possible that inflight `fetch` requests may trigger state mutations after a component is unmounted. This may result in error logs.
+  - Future features could mutate state in ways that trigger duplicate `fetch` requests for the same data.
 
 ## Developing
 
