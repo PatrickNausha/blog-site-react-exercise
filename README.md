@@ -1,4 +1,4 @@
-# React Blog Site
+# React Blog Site ([View Blog](https://patricknausha.github.io/blog-site-react-exercise))
 
 This project was created as a coding exercise.
 
