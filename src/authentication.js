@@ -4,6 +4,11 @@ import { restApiBaseUrl } from "./config";
 const AuthenticationContext = createContext(null);
 
 export function AuthenticationScope({ children }) {
+  // Skip storing authentication token securely in an HTTP-only cookie
+  // so we can easily deploy the app as a set of static files. Avoid
+  // storing insecurely in `localStorage`, client-side cookie, etc.
+  // Storing in component state is also not secure, but is simple and
+  // this is just a coding exercise app.
   const [authenticationToken, setAuthenticationToken] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   async function signIn({ email, password }) {
