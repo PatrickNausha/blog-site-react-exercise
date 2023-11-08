@@ -182,6 +182,7 @@ function usePostComments(postId) {
         hasMore = newPage.length;
       }
 
+      // Sort by date, descending, so new comments can go at the top near the NewComment editor.
       comments.sort((a, b) => {
         if (a.created_at < b.created_at) {
           return 1;
