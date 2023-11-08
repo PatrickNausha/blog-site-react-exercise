@@ -6,7 +6,6 @@ import {
   Route,
   createHashRouter,
 } from "react-router-dom";
-import "./index.css";
 import { Root } from "./Root";
 import { Homepage } from "./Homepage";
 import { Post } from "./Post";
