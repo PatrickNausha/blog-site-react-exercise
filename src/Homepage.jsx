@@ -5,8 +5,11 @@ import { restApiBaseUrl } from "./config";
 import { useAuthentication } from "./authentication";
 
 export function Homepage() {
-  // TODO: Detect last page.
-  const { data: blogPosts, loadNextPage } = usePagedData(async function (page) {
+  const {
+    data: blogPosts,
+    loadNextPage,
+    hasMore,
+  } = usePagedData(async function (page) {
     const fetchResult = await fetch(`${restApiBaseUrl}/posts?page=${page}`);
     const json = await fetchResult.json();
     const newPage = json.posts;
@@ -30,11 +33,11 @@ export function Homepage() {
           <PostPreview key={post.id} post={post} />
         </div>
       ))}
-      <div>
+      {hasMore && (
         <div className="container" ref={infiniteScrollTriggerRef}>
           Loading ...
         </div>
-      </div>
+      )}
     </>
   );
 }
