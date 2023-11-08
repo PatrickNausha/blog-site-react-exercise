@@ -41,9 +41,15 @@ export function Post() {
           {dateFormat.format(new Date(post.created_at))}
         </span>
         {isMyPost && (
-          <>
-            <Link to={`/posts/${postId}/edit`}>Edit</Link>
+          <div className="mt-2">
+            <Link
+              className="btn btn-outline-primary btn-sm"
+              to={`/posts/${postId}/edit`}
+            >
+              Edit
+            </Link>{" "}
             <button
+              className="btn btn-outline-danger btn-sm"
               onClick={() => {
                 deletePost().then(() => {
                   navigate("/");
@@ -52,7 +58,7 @@ export function Post() {
             >
               Delete Post
             </button>
-          </>
+          </div>
         )}
         <div class="border-bottom py-4">{post.body}</div>
       </article>
