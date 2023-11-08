@@ -4,7 +4,7 @@ import { useAuthentication } from "./authentication";
 export function Root() {
   const { currentUser } = useAuthentication();
   return (
-    <div>
+    <>
       <div className="container py-5 my-4">
         <h1 className="text-center mb-4">
           <Link className="text-decoration-none" href="/">
@@ -33,6 +33,6 @@ export function Root() {
         </div>
       </div>
       <Outlet />
-    </div>
+    </>
   );
 }
