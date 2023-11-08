@@ -29,8 +29,8 @@ export function Homepage() {
         </div>
       )}
       {posts.map((post) => (
-        <div className="container border-bottom">
-          <PostPreview key={post.id} post={post} />
+        <div key={post.id} className="container border-bottom">
+          <PostPreview post={post} />
         </div>
       ))}
       {hasMore && (

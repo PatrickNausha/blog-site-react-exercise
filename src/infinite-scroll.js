@@ -8,7 +8,7 @@ export function usePagedData(getPage) {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    if (!hasMore) {
+    if (!hasMore || currentRequest.current) {
       return;
     }
 
