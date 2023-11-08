@@ -161,7 +161,6 @@ function usePostComments(postId) {
   }
 
   useEffect(() => {
-    let isCancelled = false;
     (async () => {
       let hasMore = true;
       let comments = [];
@@ -173,9 +172,6 @@ function usePostComments(postId) {
           `${restApiBaseUrl}/posts/${postId}/comments?page=${page}`
         );
         const json = await fetchResult.json();
-        if (isCancelled) {
-          return;
-        }
 
         if (!fetchResult.ok) {
           throw new Error(`Unexpected status. ${fetchResult.status}`);
@@ -199,10 +195,6 @@ function usePostComments(postId) {
       setComments(comments);
       setIsLoading(false);
     })();
-
-    return () => {
-      isCancelled = true;
-    };
   }, [postId]);
 
   return { comments, isLoading, addComment, deleteComment, editComment };
