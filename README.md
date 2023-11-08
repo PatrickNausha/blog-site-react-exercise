@@ -1,12 +1,45 @@
-# Getting Started with Create React App
+# React Blog Site
+
+This project was created as a coding exercise.
+
+## Overview
+
+### Features
+
+The site supports the following operations
+
+- Create an Account and authenticate against protected API endpoints using JWT
+- Create, edit and delete posts
+- Comment on posts
+- Browse and read blog posts and comments from other users
+
+### Non-features
+
+In order to reduce project scope and support deployment to GitHub pages, the following features are intentionally omitted.
+
+- Full URL-based routing.
+  - This project uses a hash-based routing system. This antiquated single-page application routing approach uses the URL fragment (e.g. `/blog-site-react-exercise/#/posts/create` instead of just `/blog-site-react-exercise/posts/create`)
+- Persistent authentication
+  - This application does not use cookie authentication.
+  - In a commercial context, this application would likely use a reverse proxy that transforms the JWT Authorization header into a cookie.
+  - An HTTP-only cookie instead of a JWT Authorization header would also reduce the risk that the JWT was stolen by a bad actor.
+- Sever Side Rendering
+  - This is a client side rendered, single-page application.
+  - Rationale: Using only static files and no server code allows the site to be deployed to GitHub pages.
+- Error feedback
+  - Error feedback is extremely limited.
+  - If the user provides bad input, e.g. invalid password, either a generic error message or no error message will be shown.
+  - Operations that fail due to server errors may silently fail or crash the page.
+
+## Developing
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -14,12 +47,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+#### `npm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -28,43 +61,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
